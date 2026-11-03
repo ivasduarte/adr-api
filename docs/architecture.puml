@@ -1,0 +1,19 @@
+@startuml "architecture"
+package "Presentation" {
+  [Express API]
+}
+package "Application" {
+  [CreateAdr Use Case]
+}
+package "Domain" {
+  [Adr Entity]
+  [AdrRepository Interface]
+}
+package "Infrastructure" {
+  [FileAdrRepository]
+}
+[Express API] --> [CreateAdr Use Case]
+[CreateAdr Use Case] --> [Adr Entity]
+[CreateAdr Use Case] --> [AdrRepository Interface]
+[FileAdrRepository] ..|> [AdrRepository Interface]
+@enduml
