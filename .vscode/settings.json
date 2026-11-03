@@ -1,0 +1,7 @@
+{
+  "workbench.colorTheme": "Pastel",
+  "editor.formatOnSave": true,
+  "editor.formatOnPaste": true,
+  "editor.acceptSuggestionOnEnter": "off",
+  "prettier.enableDebugLogs": true
+}
