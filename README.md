@@ -1,3 +1,5 @@
+# ADR API
+
 API and CLI for managing, automating, and validating Architecture Decision Records (ADRs).
 
 ## The Problem
