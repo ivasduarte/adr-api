@@ -1,6 +1,5 @@
 import fs from "node:fs/promises";
 import path from "node:path";
-import plantumlEncoder from "plantuml-encoder";
 import { AdrRepository } from "../domain/AdrRepository.js";
 
 export class FileAdrRepository extends AdrRepository {
@@ -10,31 +9,44 @@ export class FileAdrRepository extends AdrRepository {
   }
 
   async save(adr) {
-    const fullPlantUml = `
-@startuml
-skinparam handwritten true
-skinparam monochrome true
-${adr.plantUmlCode}
-@enduml
-    `.trim();
+    await fs.mkdir(this.directoryPath, { recursive: true });
 
-    const encodedPlantUml = plantumlEncoder.encode(fullPlantUml);
-    const imageUrl = `http://www.plantuml.com/plantuml/svg/${encodedPlantUml}`;
+    const positiveList =
+      adr.positiveConsequences.length > 0
+        ? adr.positiveConsequences.map((c) => `* [+] ${c}`).join("\n")
+        : "* None identified.";
+
+    const negativeList =
+      adr.negativeConsequences.length > 0
+        ? adr.negativeConsequences.map((c) => `* [-] ${c}`).join("\n")
+        : "* None identified.";
 
     const markdownContent = `# ADR: ${adr.title}
 
 **Date:** ${new Date().toISOString().split("T")[0]}
 **Status:** ${adr.status}
 
-## 1. Context and Decision
-${adr.content}
+## 1. Context
+${adr.context}
 
-## 2. Architectural Design
-![Diagrama](${imageUrl})
+## 2. Options Considered
+${adr.consideredOptions}
 
-## 3. Consequences
-* (Fill in the positive impacts)
-* (Fill in the negative impacts)
+## 3. Option Selected
+${adr.chosenOption}
+
+## 4. Consequences
+
+**Positive:**
+${positiveList}
+
+**Negative:**
+${negativeList}
+
+## 5. Architectural Design
+\`\`\`mermaid
+${adr.mermaidCode}
+\`\`\`
 `;
 
     const filePath = path.join(this.directoryPath, `${adr.id}.md`);

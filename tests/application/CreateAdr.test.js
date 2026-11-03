@@ -19,9 +19,14 @@ test("Creates and saves a new ADR", async () => {
   const useCase = new CreateAdr(dummyRepo);
 
   const request = {
-    title: "Adopt DDD",
-    content: "Isolate business logic from infrastructure.",
-    plantUmlCode: "component Architecture",
+    title: "Adopting Mermaid",
+    status: "ACCEPTED",
+    context: "We need diagrams on GitHub without generating images.",
+    consideredOptions: "1. PlantUML\n2. Mermaid",
+    chosenOption: "Mermaid, for native support.",
+    positiveConsequences: ["No dependencies", "Generated file is lightweight"],
+    negativeConsequences: ["Different syntax"],
+    mermaidCode: "TD graph\nA-->B",
   };
 
   const result = await useCase.execute(request);
