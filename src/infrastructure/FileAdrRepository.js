@@ -10,20 +10,31 @@ export class FileAdrRepository extends AdrRepository {
   }
 
   async save(adr) {
-    await fs.mkdir(this.directoryPath, { recursive: true });
+    const fullPlantUml = `
+@startuml
+skinparam handwritten true
+skinparam monochrome true
+${adr.plantUmlCode}
+@enduml
+    `.trim();
 
-    const encodedPlantUml = plantumlEncoder.encode(adr.plantUmlCode);
+    const encodedPlantUml = plantumlEncoder.encode(fullPlantUml);
     const imageUrl = `http://www.plantuml.com/plantuml/svg/${encodedPlantUml}`;
 
-    const markdownContent = `# ${adr.title}
+    const markdownContent = `# ADR: ${adr.title}
 
+**Date:** ${new Date().toISOString().split("T")[0]}
 **Status:** ${adr.status}
 
-## Context
+## 1. Context and Decision
 ${adr.content}
 
-## Architecture
-![Diagrama PlantUML](${imageUrl})
+## 2. Architectural Design
+![Diagrama](${imageUrl})
+
+## 3. Consequences
+* (Fill in the positive impacts)
+* (Fill in the negative impacts)
 `;
 
     const filePath = path.join(this.directoryPath, `${adr.id}.md`);
