@@ -1,5 +1,6 @@
 @startuml "architecture"
 package "Presentation" {
+  [CLI (Inquirer)]
   [Express API]
 }
 package "Application" {
@@ -12,6 +13,8 @@ package "Domain" {
 package "Infrastructure" {
   [FileAdrRepository]
 }
+
+[CLI (Inquirer)] --> [Express API] : HTTP POST
 [Express API] --> [CreateAdr Use Case]
 [CreateAdr Use Case] --> [Adr Entity]
 [CreateAdr Use Case] --> [AdrRepository Interface]
